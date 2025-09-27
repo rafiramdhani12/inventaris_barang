@@ -20,9 +20,35 @@ class AuthController{
         }
     }
 
+    public static function isAdmin(){
+        return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+    }
+
+    public static function register($nama, $username, $password, $role){
+        global $pdo;
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $sql = "INSERT INTO users (nama, username, password, role) VALUES (:nama, :username, :password, :role)";
+        $stmt = $pdo->prepare($sql);
+        try {
+            $stmt->execute([
+                'nama' => $nama,
+                'username' => $username,
+                'password' => $hashedPassword,
+                'role' => $role
+            ]);
+            header("Location: index.php?action=login");
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                echo "Username sudah terdaftar.";
+            } else {
+                echo "Error: " . $e->getMessage();
+            }
+        }
+    }
+
     public static function logout(){
         session_destroy();
-        header("Location: views/login.php");
+        header("Location: index.php");
     }
 
 

@@ -4,7 +4,7 @@
 <div class="container my-4">
   <div class="row">
     <!-- Cards -->
-    <div class="col-md-3">
+    <div class="col-md-2">
       <div class="card text-bg-primary mb-3">
         <div class="card-body">
           <h5 class="card-title">Total Barang</h5>
@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
       <div class="card text-bg-success mb-3">
         <div class="card-body">
           <h5 class="card-title">Barang Baik</h5>
@@ -20,8 +20,8 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="card text-bg-warning mb-3">
+    <div class="col-md-2">
+      <div class="card text-bg-warning mb-3 text-white">
         <div class="card-body">
           <h5 class="card-title">Barang Rusak</h5>
           <p class="card-text fs-4"><?= $total_rusak ?></p>
@@ -29,7 +29,15 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="card text-bg-info mb-3">
+      <div class="card text-bg-danger mb-3 text-white">
+        <div class="card-body">
+          <h5 class="card-title">Barang Hilang</h5>
+          <p class="card-text fs-4"><?= $total_hilang ?></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card text-bg-info mb-3 text-white">
         <div class="card-body">
           <h5 class="card-title">Lokasi</h5>
           <p class="card-text fs-4"><?= $total_lokasi?></p>
@@ -88,7 +96,7 @@
           <tr>
             <td><?= htmlspecialchars( $transaksi['create_time'] );?></td>
             <td><?= htmlspecialchars( $transaksi['nama_barang'] );?></td>
-            <td><?= htmlspecialchars( $transaksi['jenis'] );?></td>
+            <td><?= htmlspecialchars( $transaksi['status'] );?></td>
             <td><?= htmlspecialchars( $transaksi['jumlah'] );?></td>
             <td><?= htmlspecialchars( $transaksi['keterangan'] );?></td>
           </tr>

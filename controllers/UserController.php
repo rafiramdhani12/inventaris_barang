@@ -5,11 +5,11 @@ require_once 'models/User.php';
 class UserController{
     public static function listUser(){
         $users = User::getUser();
-        require 'views/user/index.php';
+        require 'views/pages/user/index.php';
     }
 
     public static function createUser(){
-        require 'views/registrasi.php';
+        require 'views/pages/registrasi.php';
     }
 
     public static function saveUser(){
