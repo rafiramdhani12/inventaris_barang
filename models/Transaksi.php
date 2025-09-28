@@ -6,7 +6,7 @@ class Transaksi {
     
     public static function getTransaksi(){
         global $pdo;
-        $sql = "SELECT t.*, b.nama_barang, b.kategori, u.username
+        $sql = "SELECT t.*, b.nama_barang, b.kategori, u.username , b.lokasi , b.create_time
                 FROM transaksi t
                 LEFT JOIN barang b ON t.kode_barang = b.kode_barang
                 LEFT JOIN users u ON t.user_id = u.id

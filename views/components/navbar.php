@@ -11,7 +11,7 @@
         <li class="nav-item"><a class="nav-link" href="index.php?action=registrasi">Tambah Karyawan</a></li>
         <li class="nav-item"><a class="nav-link" href="index.php?action=karyawan">Daftar Karyawan</a></li>
         <?php endif; ?>
-        <li class="nav-item"><a class="nav-link" href="#">Laporan</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.php?action=laporan">Laporan</a></li>
         <li class="nav-item"><a class="nav-link text-danger" href="index.php?action=logout">Logout</a></li>
       </ul>
     </div>

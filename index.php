@@ -4,6 +4,7 @@ require_once "controllers/BarangController.php";
 require_once "controllers/UserController.php";
 require_once "controllers/DashboardController.php";
 require_once "controllers/TransaksiController.php";
+require_once "controllers/LaporanController.php";
 
 $action = $_GET['action'] ?? 'login';
 
@@ -59,6 +60,9 @@ switch ($action) {
     
     // user routes
     case 'karyawan':UserController::listUser();break;
+
+    // laporan routes
+    case 'laporan' :LaporanController::indexLaporan();break;
 
     default:
         echo "404 Not Found";
