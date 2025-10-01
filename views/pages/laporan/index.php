@@ -89,22 +89,5 @@
   </table>
 </div>
 
-<!-- CSS khusus saat print -->
-<style>
-@media print {
-  button, form, nav, .navbar {
-    display: none !important;
-  }
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-  th, td {
-    border: 1px solid #000 !important;
-    padding: 6px;
-    font-size: 12px;
-  }
-}
-</style>
 
 <?php require_once "views/includes/footer.php"; ?>

@@ -6,9 +6,3 @@ function deleteTransaksi(id) {
 		window.location.href = `index.php?action=delete_transaksi&id=${id}`;
 	}
 }
-
-document.getElementById("kode_barang").addEventListener("change", function () {
-	const selected = this.options[this.selectedIndex];
-	document.getElementById("nama_barang").value = selected.getAttribute("data-nama") || "";
-	document.getElementById("kategori").value = selected.getAttribute("data-kategori") || "";
-});

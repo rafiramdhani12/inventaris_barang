@@ -6,7 +6,7 @@ class Transaksi {
     
     public static function getTransaksi(){
         global $pdo;
-        $sql = "SELECT t.*, b.nama_barang, b.kategori, u.username , b.lokasi , b.create_time
+        $sql = "SELECT t.*, b.nama_barang, b.kategori, b.lokasi, u.username
                 FROM transaksi t
                 LEFT JOIN barang b ON t.kode_barang = b.kode_barang
                 LEFT JOIN users u ON t.user_id = u.id
@@ -17,7 +17,7 @@ class Transaksi {
 
     public static function paginateTransaksi($offset, $limit){
         global $pdo;
-        $sql = "SELECT t.*, b.nama_barang, b.kategori, u.username
+        $sql = "SELECT t.*, b.nama_barang, b.kategori, b.lokasi, u.username
                 FROM transaksi t
                 LEFT JOIN barang b ON t.kode_barang = b.kode_barang
                 LEFT JOIN users u ON t.user_id = u.id
@@ -32,7 +32,7 @@ class Transaksi {
 
     public static function limitTransaksi($limit){
         global $pdo;
-        $sql = "SELECT t.*, b.nama_barang, b.kategori, u.username
+        $sql = "SELECT t.*, b.nama_barang, b.kategori, b.lokasi, u.username
                 FROM transaksi t
                 LEFT JOIN barang b ON t.kode_barang = b.kode_barang
                 LEFT JOIN users u ON t.user_id = u.id
@@ -46,7 +46,7 @@ class Transaksi {
 
     public static function getTransaksiById($id){
         global $pdo;
-        $sql = "SELECT t.*, b.nama_barang, u.username
+        $sql = "SELECT t.*, b.nama_barang, b.kategori, b.lokasi, u.username
                 FROM transaksi t
                 LEFT JOIN barang b ON t.kode_barang = b.kode_barang
                 LEFT JOIN users u ON t.user_id = u.id
@@ -82,7 +82,6 @@ class Transaksi {
         return $result['total'];
     }
 
-    // Total barang masuk (sum jumlah)
     public static function totalBarangMasuk(){
         global $pdo;
         $sql = "SELECT COALESCE(SUM(jumlah), 0) as total FROM transaksi WHERE status = 'masuk'";
@@ -91,7 +90,6 @@ class Transaksi {
         return $result['total'];
     }
 
-    // Total barang keluar (sum jumlah)
     public static function totalBarangKeluar(){
         global $pdo;
         $sql = "SELECT COALESCE(SUM(jumlah), 0) as total FROM transaksi WHERE status = 'keluar'";
@@ -101,19 +99,19 @@ class Transaksi {
     }
 
     public static function countSearch($keyword) {
-    global $pdo;
-    $sql = "SELECT COUNT(*) FROM transaksi t
-            LEFT JOIN barang b ON t.kode_barang = b.kode_barang
-            LEFT JOIN users u ON t.user_id = u.id
-            WHERE t.kode_barang LIKE :keyword 
-               OR b.nama_barang LIKE :keyword 
-               OR t.keterangan LIKE :keyword
-               OR u.username LIKE :keyword";
-    $stmt = $pdo->prepare($sql);
-    $searchTerm = '%' . $keyword . '%';
-    $stmt->bindValue(':keyword', $searchTerm, PDO::PARAM_STR);
-    $stmt->execute();
-    return $stmt->fetchColumn();
+        global $pdo;
+        $sql = "SELECT COUNT(*) FROM transaksi t
+                LEFT JOIN barang b ON t.kode_barang = b.kode_barang
+                LEFT JOIN users u ON t.user_id = u.id
+                WHERE t.kode_barang LIKE :keyword 
+                   OR b.nama_barang LIKE :keyword 
+                   OR t.keterangan LIKE :keyword
+                   OR u.username LIKE :keyword";
+        $stmt = $pdo->prepare($sql);
+        $searchTerm = '%' . $keyword . '%';
+        $stmt->bindValue(':keyword', $searchTerm, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchColumn();
     }       
 
     public static function countByStatus($status) {
@@ -135,7 +133,6 @@ class Transaksi {
         $stmt->execute();
         return $stmt->fetchColumn();
     }
-
 
     // ===== CRUD OPERATIONS =====
     
@@ -189,7 +186,7 @@ class Transaksi {
         } catch(Exception $e) {
             $pdo->rollback();
             error_log("Error creating transaksi: " . $e->getMessage());
-            throw $e; // Re-throw untuk handling di controller
+            throw $e;
         }
     }
 
@@ -314,7 +311,7 @@ class Transaksi {
     
     public static function searchTransaksi($keyword, $offset = 0, $limit = 10) {
         global $pdo;
-        $sql = "SELECT t.*, b.nama_barang, u.username
+        $sql = "SELECT t.*, b.nama_barang, b.kategori, b.lokasi, u.username
                 FROM transaksi t
                 LEFT JOIN barang b ON t.kode_barang = b.kode_barang
                 LEFT JOIN users u ON t.user_id = u.id
@@ -335,7 +332,7 @@ class Transaksi {
 
     public static function filterByStatus($status, $offset = 0, $limit = 10) {
         global $pdo;
-        $sql = "SELECT t.*, b.nama_barang, u.username
+        $sql = "SELECT t.*, b.nama_barang, b.kategori, b.lokasi, u.username
                 FROM transaksi t
                 LEFT JOIN barang b ON t.kode_barang = b.kode_barang
                 LEFT JOIN users u ON t.user_id = u.id
@@ -352,7 +349,7 @@ class Transaksi {
 
     public static function getTransaksiByDateRange($start_date, $end_date, $offset = 0, $limit = 10) {
         global $pdo;
-        $sql = "SELECT t.*, b.nama_barang, u.username
+        $sql = "SELECT t.*, b.nama_barang, b.kategori, b.lokasi, u.username
                 FROM transaksi t
                 LEFT JOIN barang b ON t.kode_barang = b.kode_barang
                 LEFT JOIN users u ON t.user_id = u.id

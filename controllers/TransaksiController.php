@@ -1,12 +1,10 @@
-<?php 
-
+<?php
 require_once 'models/Transaksi.php';
 require_once 'models/Barang.php';
 
 class TransaksiController {
-
+    
     public static function indexTransaksi(){
-
         $halaman = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
         $limit = 10;
         $offset = ($halaman - 1) * $limit;
@@ -44,63 +42,92 @@ class TransaksiController {
     public static function create(){
         $data_barang = Barang::getBarang();
         require_once 'views/pages/transaksi/create.php';
-
     }
 
+    // 🔥 DIPERBAIKI - Tambah Error Handling
     public static function saveTransaksi(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $kode_barang = $_POST['kode_barang'];
-            $status = $_POST['status'];
-            $jumlah = $_POST['jumlah'];
-            $keterangan = $_POST['keterangan'];
-            $user_id = $_SESSION['user_id'];
+            try {
+                $kode_barang = $_POST['kode_barang'];
+                $status = $_POST['status'];
+                $jumlah = (int)$_POST['jumlah'];
+                $keterangan = $_POST['keterangan'];
+                $user_id = $_SESSION['user_id'];
 
-            Transaksi::createTransaksi($kode_barang, $status, $jumlah , $keterangan , $user_id);  
-            header('Location: index.php?action=transaksi');
+                // Validasi input
+                if(empty($kode_barang) || empty($status) || $jumlah <= 0) {
+                    throw new Exception("Data tidak lengkap atau jumlah tidak valid!");
+                }
+
+                // Panggil method create transaksi (sudah ada logic update stok di dalamnya)
+                Transaksi::createTransaksi($kode_barang, $status, $jumlah, $keterangan, $user_id);
+                
+                $_SESSION['success'] = "Transaksi berhasil! Stok barang telah diupdate.";
+                header('Location: index.php?action=transaksi');
+                exit;
+                
+            } catch(Exception $e) {
+                $_SESSION['error'] = "Error: " . $e->getMessage();
+                header('Location: index.php?action=add_transaksi');
+                exit;
+            }
         }
     }
 
     public static function editTransaksi($id){
         $transaksi = Transaksi::getTransaksiById($id);
-        $barang = Barang::getBarangById($id);
+        $data_barang = Barang::getBarang(); // 🔥 DIPERBAIKI - Harusnya getBarang() bukan getBarangById()
         require_once 'views/pages/transaksi/edit.php';
     }
 
+    // 🔥 DIPERBAIKI - Tambah Error Handling
     public static function updateTransaksi(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $id = $_POST['id'];
-            $kode_barang = $_POST['kode_barang'];
-            $status = $_POST['status'];
-            $jumlah = $_POST['jumlah'];
-            $keterangan = $_POST['keterangan'];
-            $user_id = $_SESSION['user_id'];
+            try {
+                $id = (int)$_POST['id'];
+                $kode_barang = $_POST['kode_barang'];
+                $status = $_POST['status'];
+                $jumlah = (int)$_POST['jumlah'];
+                $keterangan = $_POST['keterangan'];
+                $user_id = $_SESSION['user_id'];
 
-            Transaksi::updateTransaksi($id, $kode_barang, $status, $jumlah , $keterangan, $user_id);  
-            header('Location: index.php?action=transaksi');
+                // Validasi input
+                if(empty($kode_barang) || empty($status) || $jumlah <= 0) {
+                    throw new Exception("Data tidak lengkap atau jumlah tidak valid!");
+                }
+
+                Transaksi::updateTransaksi($id, $kode_barang, $status, $jumlah, $keterangan, $user_id);
+                
+                $_SESSION['success'] = "Transaksi berhasil diupdate! Stok barang telah disesuaikan.";
+                header('Location: index.php?action=transaksi');
+                exit;
+                
+            } catch(Exception $e) {
+                $_SESSION['error'] = "Error: " . $e->getMessage();
+                header('Location: index.php?action=transaksi');
+                exit;
+            }
         }
     }
 
+    // 🔥 DIPERBAIKI - Tambah Error Handling
     public static function deleteTransaksi(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $id = $_POST['id'];
-            Transaksi::deleteTransaksi($id);
-            header('Location: index.php?action=transaksi');
+            try {
+                $id = (int)$_POST['id'];
+                
+                Transaksi::deleteTransaksi($id);
+                
+                $_SESSION['success'] = "Transaksi berhasil dihapus! Stok barang telah dikembalikan.";
+                header('Location: index.php?action=transaksi');
+                exit;
+                
+            } catch(Exception $e) {
+                $_SESSION['error'] = "Error: " . $e->getMessage();
+                header('Location: index.php?action=transaksi');
+                exit;
+            }
         }
     }
-
-    // public static function save(){
-    //     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    //         $id_barang = $_POST['id_barang'];
-    //         $jumlah = $_POST['jumlah'];
-    //         $tanggal = $_POST['tanggal'];
-
-    //         Transaksi::createTransaksi($id_barang, $jumlah, $tanggal);
-    //         header('Location: index.php?action=transaksi');
-    //     }
-    // }
-
 }
-
-
-
 ?>
